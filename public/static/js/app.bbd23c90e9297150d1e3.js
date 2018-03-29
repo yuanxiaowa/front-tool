@@ -3252,18 +3252,29 @@ var xterm_default = /*#__PURE__*/__webpack_require__.n(xterm);
       var _this2 = this;
 
       this.dialog = false;
+      var item = this.originalList.find(function (item) {
+        return item.name === _this2.newcommand.category;
+      });
       if (this.editData) {
+        var _item = this.originalList.find(function (item) {
+          return item.name === _this2.editData.group;
+        });
         assign_default()(this.editData, this.newcommand);
+        if (item !== _item) {
+          var i = _item.children.findIndex(function (item) {
+            return item.name === _this2.editData.group;
+          });
+          _item.children.splice(i, 1);
+          item.children.push(this.editData);
+        }
         this.editData = null;
       } else {
-        var item = this.originalList.find(function (item) {
-          return item.name === _this2.newcommand.category;
-        });
         item.children.push({
           text: this.newcommand.text,
           value: this.newcommand.value
         });
       }
+      this.updateList();
       this.newcommand.text = '';
       this.newcommand.value = '';
       this.saveCommand();
@@ -3313,7 +3324,7 @@ var xterm_default = /*#__PURE__*/__webpack_require__.n(xterm);
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-314432e2","hasScoped":false,"transformToRequire":{"video":"src","source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/pages/shell/Detail.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-dbbe4908","hasScoped":false,"transformToRequire":{"video":"src","source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/pages/shell/Detail.vue
 var Detail_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{ref:"term"}),_vm._v(" "),_c('v-btn',{attrs:{"color":"error"},on:{"click":_vm.clear}},[_vm._v("清空")]),_vm._v(" "),_c('v-layout',[_c('v-select',{attrs:{"items":_vm.commandList,"label":"常用命令","autocomplete":"","item-value":"value","item-text":"text","multiple":""},scopedSlots:_vm._u([{key:"selection",fn:function(data){return [_c('v-chip',{key:JSON.stringify(data.item),staticClass:"chip--select-multi",attrs:{"close":"","selected":data.selected},on:{"input":function($event){data.parent.selectItem(data.item)}}},[_vm._v("\n          "+_vm._s(data.item.group + '-' + data.item.text)+"\n        ")])]}},{key:"item",fn:function(data){return [(typeof data.item !== 'object')?[_c('v-list-tile-content',{domProps:{"textContent":_vm._s(data.item)}})]:[_c('v-list-tile-content',[_c('v-list-tile-title',{domProps:{"innerHTML":_vm._s(data.item.text)}})],1),_vm._v(" "),_c('v-list-tile-avatar',{on:{"click":function($event){$event.stopPropagation();_vm.edit(data.item)}}},[_vm._v("\n            编辑\n          ")])]]}}]),model:{value:(_vm.command),callback:function ($$v) {_vm.command=$$v},expression:"command"}}),_vm._v(" "),_c('v-btn',{attrs:{"color":"cyan","disabled":!_vm.command},on:{"click":_vm.action}},[_vm._v("执行")]),_vm._v(" "),_c('v-dialog',{attrs:{"persistent":""},model:{value:(_vm.dialog),callback:function ($$v) {_vm.dialog=$$v},expression:"dialog"}},[_c('v-btn',{attrs:{"slot":"activator","color":"primary","dark":""},slot:"activator"},[_vm._v("添加常用命令")]),_vm._v(" "),_c('v-card',[_c('v-card-title',[_c('span',{staticClass:"headline"},[_vm._v("添加常用命令")])]),_vm._v(" "),_c('v-card-text',[_c('v-select',{attrs:{"items":_vm.categories,"label":"类别","autocomplete":""},model:{value:(_vm.newcommand.category),callback:function ($$v) {_vm.$set(_vm.newcommand, "category", $$v)},expression:"newcommand.category"}}),_vm._v(" "),_c('v-text-field',{attrs:{"label":"名称","required":""},model:{value:(_vm.newcommand.text),callback:function ($$v) {_vm.$set(_vm.newcommand, "text", (typeof $$v === 'string'? $$v.trim(): $$v))},expression:"newcommand.text"}}),_vm._v(" "),_c('v-text-field',{attrs:{"label":"命令","required":"","multi-line":""},model:{value:(_vm.newcommand.value),callback:function ($$v) {_vm.$set(_vm.newcommand, "value", (typeof $$v === 'string'? $$v.trim(): $$v))},expression:"newcommand.value"}})],1),_vm._v(" "),_c('v-card-actions',[_c('v-spacer'),_vm._v(" "),_c('v-btn',{attrs:{"color":"blue darken-1","flat":""},nativeOn:{"click":function($event){_vm.dialog=false}}},[_vm._v("关闭")]),_vm._v(" "),_c('v-btn',{attrs:{"color":"blue darken-1","flat":"","disabled":!_vm.newcommand.value},nativeOn:{"click":function($event){return _vm.add($event)}}},[_vm._v("确定")])],1)],1)],1),_vm._v(" "),_c('v-dialog',{attrs:{"max-width":"500px"},model:{value:(_vm.dialog2),callback:function ($$v) {_vm.dialog2=$$v},expression:"dialog2"}},[_c('v-btn',{attrs:{"slot":"activator","color":"primary","dark":""},slot:"activator"},[_vm._v("添加类别")]),_vm._v(" "),_c('v-card',[_c('v-card-title',[_c('span',{staticClass:"headline"},[_vm._v("添加类别")])]),_vm._v(" "),_c('v-card-text',[_c('v-text-field',{attrs:{"label":"类别","required":""},model:{value:(_vm.category),callback:function ($$v) {_vm.category=(typeof $$v === 'string'? $$v.trim(): $$v)},expression:"category"}})],1),_vm._v(" "),_c('v-card-actions',[_c('v-spacer'),_vm._v(" "),_c('v-btn',{attrs:{"color":"blue darken-1","flat":""},nativeOn:{"click":function($event){_vm.dialog2=false}}},[_vm._v("关闭")]),_vm._v(" "),_c('v-btn',{attrs:{"color":"blue darken-1","flat":"","disabled":!_vm.category},nativeOn:{"click":function($event){return _vm.addCategory($event)}}},[_vm._v("确定")])],1)],1)],1)],1)],1)}
 var Detail_staticRenderFns = []
 var Detail_esExports = { render: Detail_render, staticRenderFns: Detail_staticRenderFns }
@@ -5045,4 +5056,4 @@ new vue_esm["a" /* default */]({
 /***/ })
 
 },["NHnr"]);
-//# sourceMappingURL=app.9719614bb842c5e7ca50.js.map
+//# sourceMappingURL=app.bbd23c90e9297150d1e3.js.map
