@@ -13,7 +13,9 @@ koa.use((ctx, next) => {
     return send(ctx, './public/index.html')
   } else if (ctx.path.startsWith('/static/')) {
     return send(ctx, ctx.path, {
-      root: './public'
+      root: './public',
+      gzip: true,
+      maxAge: 1000 * 60 * 60 * 24
     })
   }
   return next();

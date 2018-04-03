@@ -1,9 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
-class Sv {
-}
-exports.Sv = Sv;
 var filename = 'data/local-server.json';
 function getItems() {
     return new Promise((resolve, reject) => {

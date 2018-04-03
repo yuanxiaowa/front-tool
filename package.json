@@ -30,6 +30,6 @@
     "request-promise-native": "^1.0.5",
     "socket.io": "^2.0.4",
     "ssh2": "^0.6.0",
-    "svn-tool2": "^1.1.5"
+    "svn-tool2": "^1.1.7"
   }
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Path = require("path");
 const fs_1 = require("fs");
 const svn_tool2_1 = require("svn-tool2");
 var svn_tool2_2 = require("svn-tool2");
@@ -16,7 +17,7 @@ exports.mergeinfo = svn_tool2_2.mergeinfo;
 var conf = {
     paths: []
 };
-var confFileName = process.cwd() + '/.conf';
+var confFileName = Path.resolve('.conf');
 function init() {
     try {
         conf = JSON.parse(fs_1.readFileSync(confFileName, 'utf8'));

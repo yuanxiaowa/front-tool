@@ -1,3 +1,4 @@
+import * as Path from 'path'
 import { readFileSync, writeFile } from 'fs'
 import {
   getBranches,
@@ -5,7 +6,7 @@ import {
   getTrunks
 } from 'svn-tool2'
 import {
-  Ls
+  LsFile
 } from 'svn-tool2/structures'
 export {
   status as getStatus,
@@ -28,7 +29,7 @@ var conf: Conf = {
   paths: []
 }
 
-var confFileName = process.cwd() + '/.conf';
+var confFileName = Path.resolve('.conf');
 function init() {
   try {
     conf = JSON.parse(readFileSync(confFileName, 'utf8'));
@@ -53,9 +54,9 @@ export function addPath(path: string, name: string) {
   writeConf();
 }
 export async function getStructures(url: string, baseName?: string) {
-  var branches: Ls[] = [];
-  var tags: Ls[] = [];
-  var trunks: Ls[] = [];
+  var branches: LsFile[] = [];
+  var tags: LsFile[] = [];
+  var trunks: LsFile[] = [];
   try {
     branches = await getBranches(url, baseName);
   } catch (e) { }

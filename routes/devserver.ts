@@ -10,7 +10,7 @@ var router = new Router({
   prefix: '/api/devserver'
 });
 
-class Opt extends Sv {
+interface Opt extends Sv {
   instance?: BrowserSyncInstance
   urls?: string[]
 }

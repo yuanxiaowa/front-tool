@@ -8,8 +8,6 @@ const httpProxy = require("http-proxy");
 var router = new Router({
     prefix: '/api/devserver'
 });
-class Opt extends devserver_1.Sv {
-}
 utils_1.wrapRouter(router);
 var items;
 devserver_1.getItems().then(_items => {

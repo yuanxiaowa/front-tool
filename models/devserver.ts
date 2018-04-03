@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'fs'
 
-export class Sv {
+export interface Sv {
   name: string
   dir: string
   port: number
