@@ -1,4 +1,6 @@
 import { readFile, writeFile } from 'fs'
+import DB from './db';
+import { BrowserSyncInstance } from 'browser-sync';
 
 export interface Sv {
   name: string
@@ -8,25 +10,37 @@ export interface Sv {
   proxy?: string[][]
 }
 
-var filename = 'data/local-server.json';
-export function getItems(): Promise<Sv[]> {
-  return new Promise((resolve, reject) => {
-    readFile(filename, 'utf8', (err, data) => {
-      if (err) {
-        return reject(err)
-      }
-      resolve(JSON.parse(data))
-    })
-  })
+export interface Opt extends Sv {
+  instance?: BrowserSyncInstance
+  urls?: string[]
 }
 
-export function saveItems(items: Sv[]): Promise<void> {
-  return new Promise((resolve, reject) => {
-    writeFile(filename, JSON.stringify(items), err => {
-      if (err) {
-        return reject(err)
-      }
-      resolve();
-    })
-  })
+var db = new DB<Sv>('data/local-server.json')
+var items: Opt[]
+
+db.load().then(arr => {
+  items = arr
+})
+
+export function list(): Promise<Sv[]> {
+  return db.load()
+}
+
+export function save() {
+  return db.save(items.map(item => ({
+    name: item.name,
+    dir: item.dir,
+    port: item.port,
+    open: item.open,
+    proxy: item.proxy
+  })))
+}
+
+export function add(item: Sv) {
+  items.push(item)
+  return save()
+}
+
+export function findByDir(dir:string) {
+  return <Opt>items.find(item => item.dir === dir)
 }

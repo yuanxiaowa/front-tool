@@ -865,7 +865,7 @@ var Explorer = __webpack_require__("Wle/");
 
               case 20:
                 if (!_this5.isCommit) {
-                  _context.next = 31;
+                  _context.next = 29;
                   break;
                 }
 
@@ -917,7 +917,7 @@ var Explorer = __webpack_require__("Wle/");
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-6a3b7ffe","hasScoped":false,"transformToRequire":{"video":"src","source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/pages/svn/Action.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-4479818c","hasScoped":false,"transformToRequire":{"video":"src","source":"src","img":"src","image":"xlink:href"},"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/pages/svn/Action.vue
 var Action_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-form',[_c('v-layout',{attrs:{"wrap":""}},[_c('v-select',{attrs:{"items":_vm.paths,"label":"本地版本库","bottom":""},model:{value:(_vm.path),callback:function ($$v) {_vm.path=$$v},expression:"path"}}),_vm._v(" "),_c('explorer',{attrs:{"path":_vm.path}})],1),_vm._v(" "),(_vm.path)?_c('div',[_c('v-expansion-panel',[_c('v-expansion-panel-content',[_c('div',{attrs:{"slot":"header"},slot:"header"},[_vm._v("状态")]),_vm._v(" "),_c('svn-status',{ref:"svnStatus",attrs:{"path":_vm.path}})],1)],1),_vm._v(" "),_c('v-divider'),_vm._v(" "),_c('v-card',[_c('v-card-text',[_c('v-checkbox',{attrs:{"label":"更新"},model:{value:(_vm.isUpdate),callback:function ($$v) {_vm.isUpdate=$$v},expression:"isUpdate"}})],1)],1),_vm._v(" "),_c('v-expansion-panel',{attrs:{"expand":""}},[_c('v-expansion-panel-content',[_c('v-checkbox',{attrs:{"slot":"header","label":"合并"},slot:"header",model:{value:(_vm.isMerge),callback:function ($$v) {_vm.isMerge=$$v},expression:"isMerge"}}),_vm._v(" "),(_vm.isMerge)?_c('v-container',[_c('svn-merge',{ref:"svnMerge",attrs:{"url":_vm.info.url,"path":_vm.path}})],1):_vm._e()],1),_vm._v(" "),_c('v-expansion-panel-content',{attrs:{"value":_vm.isCommit}},[_c('v-checkbox',{attrs:{"slot":"header","label":"提交"},slot:"header",model:{value:(_vm.isCommit),callback:function ($$v) {_vm.isCommit=$$v},expression:"isCommit"}}),_vm._v(" "),_c('svn-commit',{model:{value:(_vm.msg),callback:function ($$v) {_vm.msg=$$v},expression:"msg"}})],1)],1),_vm._v(" "),_c('div',[_c('v-btn',{attrs:{"color":"primary","disabled":_vm.isExcuting},on:{"click":_vm.excute}},[_vm._v("执行")])],1),_vm._v(" "),_c('log-board',{ref:"logBoard"})],1):_vm._e()],1)}
 var Action_staticRenderFns = []
 var Action_esExports = { render: Action_render, staticRenderFns: Action_staticRenderFns }
@@ -1066,16 +1066,11 @@ var update = __webpack_require__("rjj0")("f4a45506", content, true, {});
 /* harmony export (immutable) */ __webpack_exports__["a"] = addFiles;
 /* harmony export (immutable) */ __webpack_exports__["d"] = delFiles;
 /* harmony export (immutable) */ __webpack_exports__["c"] = commitFiles;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("mtWM");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__("wRi7");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__axios__ = __webpack_require__("gvqO");
 
-var instance = __WEBPACK_IMPORTED_MODULE_0_axios___default.a.create({
-    baseURL: '/api/svn'
-});
-
+var instance = Object(__WEBPACK_IMPORTED_MODULE_0__axios__["a" /* default */])('svn');
 function fetchPaths() {
-    return instance.get('paths').then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.get('paths');
 }
 function addPath(params) {
     return instance.post('path', params);
@@ -1085,14 +1080,14 @@ function fetchStatus(path) {
         params: {
             path: path
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function fetchInfo(path) {
     return instance.get('info', {
         params: {
             path: path
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function fetchStructure(path, base) {
     return instance.get('/structure', {
@@ -1100,28 +1095,28 @@ function fetchStructure(path, base) {
             path: path,
             base: base
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function fetchLogs(params) {
     return instance.get('log', {
         params: params
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function update(path) {
-    return instance.post('update', { path: path }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.post('update', { path: path });
 }
 function resolveFiles(paths, path) {
     return instance.post('resolve', {
         path: path,
         paths: paths
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function merge(path, url, revisions) {
     return instance.post('merge', {
         path: path,
         url: url,
         revisions: revisions
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function mergeinfo(path, url) {
     return instance.get('mergeinfo', {
@@ -1129,16 +1124,16 @@ function mergeinfo(path, url) {
             path: path,
             url: url
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function addFiles(paths, path) {
-    return instance.post('add', { paths: paths, path: path }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.post('add', { paths: paths, path: path });
 }
 function delFiles(paths, path) {
-    return instance.post('del', { paths: paths, path: path }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.post('del', { paths: paths, path: path });
 }
 function commitFiles(path, paths, msg) {
-    return instance.post('commit', { path: path, msg: msg, paths: paths }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.post('commit', { path: path, msg: msg, paths: paths });
 }
 
 /***/ }),
@@ -1158,59 +1153,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 /***/ }),
 
-/***/ "R4wc":
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__("kM2E");
-
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__("To3L") });
-
-
-/***/ }),
-
-/***/ "To3L":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = __webpack_require__("lktj");
-var gOPS = __webpack_require__("1kS7");
-var pIE = __webpack_require__("NpIQ");
-var toObject = __webpack_require__("sB3e");
-var IObject = __webpack_require__("MU5D");
-var $assign = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__("S82l")(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-  } return T;
-} : $assign;
-
-
-/***/ }),
-
 /***/ "TvEJ":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1222,15 +1164,6 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var update = __webpack_require__("rjj0")("cee49102", content, true, {});
-
-/***/ }),
-
-/***/ "V3tA":
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__("R4wc");
-module.exports = __webpack_require__("FeBl").Object.assign;
-
 
 /***/ }),
 
@@ -1271,7 +1204,7 @@ var common = __webpack_require__("RS51");
   props: ['path'],
   methods: {
     explore: function explore() {
-      Object(common["a" /* explore */])(this.path);
+      Object(common["b" /* explore */])(this.path);
     }
   }
 });
@@ -1341,13 +1274,6 @@ var update = __webpack_require__("rjj0")("77577b9c", content, true, {});
 
 /***/ }),
 
-/***/ "woOf":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__("V3tA"), __esModule: true };
-
-/***/ }),
-
 /***/ "x3sp":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1364,4 +1290,4 @@ exports.push([module.i, "\n.log-board {\r\n  max-height: 500px;\r\n  text-align:
 /***/ })
 
 });
-//# sourceMappingURL=svn.5e8c74f897c16448341b.js.map
+//# sourceMappingURL=svn.7b3830bd8497db2761c8.js.map

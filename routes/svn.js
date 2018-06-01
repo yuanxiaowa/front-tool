@@ -1,12 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Router = require("koa-router");
-const utils_1 = require("../utils");
 const svn_1 = require("../models/svn");
-var router = new Router({
-    prefix: '/api/svn'
-});
-utils_1.wrapRouter(router);
+const router_1 = require("./router");
+const router = router_1.default('/api/svn');
 router.get('/paths', svn_1.getPaths)
     .post('/path', (ctx) => {
     var path = ctx.request.body.path;

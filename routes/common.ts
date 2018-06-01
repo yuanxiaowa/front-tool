@@ -1,12 +1,10 @@
-import * as Router from 'koa-router'
 import { exec } from 'child_process'
 import * as Path from 'path'
-import { createReadStream, createWriteStream, writeFile } from 'fs';
 import * as glob from 'glob'
+import getRouter from './router';
+import { createReadStream, createWriteStream, stat, remove, unlink } from 'fs-extra';
 
-var router = new Router({
-  prefix: '/api'
-});
+const router = getRouter('/api', false)
 
 // 浏览文件或文件夹
 router.get('/explore', ctx => new Promise((resolve, reject) => {
@@ -30,45 +28,71 @@ router.get('/file', ctx => {
   })
 })
 
-router.get('/files', ctx => {
+router.delete('/file', async ctx => {
+  var path = ctx.query.path
+  var data: any = {
+    code: 0
+  }
+  try {
+    await remove(path)
+  } catch (e) {
+    data.code = 1
+    data.msg = e.message
+  }
+  ctx.body = data
+})
+
+router.get('/file/list', ctx => {
   var pattern = ctx.query.pattern
   var nodir = ctx.query.nodir
+  var path = ctx.query.path
   return new Promise((resolve, reject) => {
-    glob(pattern, { nodir }, (err, data) => {
-      var code = err ? 1 : 0;
-      ctx.body = {
-        code,
-        data
-      }
-      if (err) {
-        return reject(err)
-      }
-      resolve()
-    })
+    if (pattern) {
+      glob(pattern, { nodir }, (err, data) => {
+        var code = err ? 1 : 0;
+        ctx.body = {
+          code,
+          data
+        }
+        if (err) {
+          return reject(err)
+        }
+        resolve()
+      })
+    } else {
+      let globInstance = new glob.Glob(path + '/*', {
+        stat: true
+      }, (err, matches) => {
+        var code = err ? 1 : 0;
+        ctx.body = {
+          code
+        }
+        if (err) {
+          return reject(err)
+        }
+        ctx.body.data = matches.map(path => {
+          var stat = globInstance.statCache[path]
+          return {
+            name: Path.basename(path),
+            path,
+            dir: stat.isDirectory(),
+            ctime: stat.ctimeMs,
+            mtime: stat.mtimeMs
+          }
+        })
+        resolve()
+      })
+    }
   })
 })
 
-router.put('/upload', ctx => {
+router.put('/file/upload', ctx => {
   var path = ctx.query.path
-  if (ctx.request.type === 'application/json') {
-    return new Promise((resolve, reject) => {
-      writeFile(path, JSON.stringify(ctx.request.body), (err) => {
-        ctx.body = {
-          code: err ? 1 : 0
-        }
-        resolve()
-        if (err) {
-          reject(err)
-        } else {
-          resolve()
-        }
-      })
-    })
-  }
   return new Promise((resolve, reject) => {
     ctx.req.pipe(createWriteStream(path)).on('finish', () => {
       ctx.body = {
-        code: 0
+        code: 0,
+        data: path
       }
       resolve()
     }).on('error', reject)

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Path = require("path");
-const fs_1 = require("fs");
 const svn_tool2_1 = require("svn-tool2");
+const db_1 = require("./db");
 var svn_tool2_2 = require("svn-tool2");
 exports.getStatus = svn_tool2_2.status;
 exports.addFiles = svn_tool2_2.add;
@@ -17,18 +16,15 @@ exports.mergeinfo = svn_tool2_2.mergeinfo;
 var conf = {
     paths: []
 };
-var confFileName = Path.resolve('.conf');
-function init() {
-    try {
-        conf = JSON.parse(fs_1.readFileSync(confFileName, 'utf8'));
-    }
-    catch (e) {
-    }
-}
+var db = new db_1.default('.conf');
 function writeConf() {
-    fs_1.writeFile(confFileName, JSON.stringify(conf), () => { });
+    // @ts-ignore
+    return db.save(conf);
 }
-init();
+db.load().then(items => {
+    // @ts-ignore
+    conf = items;
+});
 function getPaths() {
     return conf.paths;
 }

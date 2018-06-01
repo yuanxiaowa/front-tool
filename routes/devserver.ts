@@ -1,34 +1,23 @@
-import { create, BrowserSyncInstance } from 'browser-sync'
+import { create } from 'browser-sync'
 import * as browserSync from 'browser-sync'
-import * as Router from 'koa-router'
-import { wrapRouter } from '../utils'
-import { Sv, getItems, saveItems } from '../models/devserver'
+import { Sv, list, add, Opt, findByDir } from '../models/devserver'
 import * as httpProxy from 'http-proxy'
 import { IncomingMessage, ServerResponse } from 'http';
+import getRouter from './router';
 
-var router = new Router({
-  prefix: '/api/devserver'
+const router = getRouter('/api/devserver')
+
+router.get('/list', async () => {
+  var items = await list()
+  return items.map((item: any) => ({
+    name: item.name,
+    dir: item.dir,
+    port: item.port,
+    running: !!item.instance,
+    urls: item.urls,
+    proxy: item.proxy
+  }))
 });
-
-interface Opt extends Sv {
-  instance?: BrowserSyncInstance
-  urls?: string[]
-}
-
-wrapRouter(router);
-
-var items: Opt[];
-getItems().then(_items => {
-  items = _items;
-})
-router.get('/list', () => items.map(item => ({
-  name: item.name,
-  dir: item.dir,
-  port: item.port,
-  running: !!item.instance,
-  urls: item.urls,
-  proxy: item.proxy
-})));
 
 router.post('/add', ctx => {
   var data = ctx.request.body;
@@ -36,14 +25,7 @@ router.post('/add', ctx => {
     let lines: string[] = data.proxy.trim().split(/\r?\n/);
     data.proxy = lines.map(line => line.split(/\s+/)).filter(line => line.length >= 2)
   }
-  items.push(data);
-  return saveItems(items.map(item => ({
-    name: item.name,
-    dir: item.dir,
-    port: item.port,
-    open: item.open,
-    proxy: item.proxy
-  })))
+  return add(data)
 })
 
 var proxy = httpProxy.createProxyServer({
@@ -55,7 +37,7 @@ var proxy = httpProxy.createProxyServer({
  * 启动本地服务
  * @param item 服务配置
  */
-function startServer(item: Opt): Promise<{ instance: BrowserSyncInstance, urls: string[] }> {
+function startServer(item: Opt): Promise<{ instance: browserSync.BrowserSyncInstance, urls: string[] }> {
   return new Promise((resolve, reject) => {
     var opt: browserSync.Options = {
       server: {
@@ -100,8 +82,7 @@ function startServer(item: Opt): Promise<{ instance: BrowserSyncInstance, urls: 
 }
 
 router.get('/start', async ctx => {
-  var baseDir = ctx.query.dir;
-  var item = <Opt>items.find(item => item.dir === baseDir);
+  var item = findByDir(ctx.query.dir)
   var { instance, urls } = await startServer(item);
   item.instance = instance;
   item.urls = urls;
@@ -109,7 +90,7 @@ router.get('/start', async ctx => {
 
 router.get('/stop', ctx => {
   var baseDir = ctx.query.dir;
-  var item = <Opt>items.find(item => item.dir === baseDir);
+  var item = findByDir(ctx.query.dir)
   if (item.instance) {
     item.instance.exit();
     item.instance = undefined;

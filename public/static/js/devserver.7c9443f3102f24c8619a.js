@@ -36,33 +36,28 @@ var update = __webpack_require__("rjj0")("f07304e0", content, true, {});
 /* harmony export (immutable) */ __webpack_exports__["a"] = add;
 /* harmony export (immutable) */ __webpack_exports__["c"] = start;
 /* harmony export (immutable) */ __webpack_exports__["d"] = stop;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("mtWM");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__("wRi7");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__axios__ = __webpack_require__("gvqO");
 
-var instance = __WEBPACK_IMPORTED_MODULE_0_axios___default.a.create({
-    baseURL: '/api/devserver'
-});
-
+var instance = Object(__WEBPACK_IMPORTED_MODULE_0__axios__["a" /* default */])('devserver');
 function fetchList() {
-    return instance.get('list').then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.get('list');
 }
 function add(data) {
-    return instance.post('add', data).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    return instance.post('add', data);
 }
 function start(dir) {
     return instance.get('start', {
         params: {
             dir: dir
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 function stop(dir) {
     return instance.get('stop', {
         params: {
             dir: dir
         }
-    }).then(__WEBPACK_IMPORTED_MODULE_1__util__["a" /* getAData */]);
+    });
 }
 
 /***/ }),
@@ -326,7 +321,7 @@ var common = __webpack_require__("RS51");
   props: ['path'],
   methods: {
     explore: function explore() {
-      Object(common["a" /* explore */])(this.path);
+      Object(common["b" /* explore */])(this.path);
     }
   }
 });
@@ -412,4 +407,4 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ })
 
 });
-//# sourceMappingURL=devserver.cbcc5fa3ece47054b3fd.js.map
+//# sourceMappingURL=devserver.7c9443f3102f24c8619a.js.map

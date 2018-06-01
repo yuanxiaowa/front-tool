@@ -1,13 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Router = require("koa-router");
 const child_process_1 = require("child_process");
 const Path = require("path");
-const fs_1 = require("fs");
 const glob = require("glob");
-var router = new Router({
-    prefix: '/api'
-});
+const router_1 = require("./router");
+const fs_extra_1 = require("fs-extra");
+const router = router_1.default('/api', false);
 // 浏览文件或文件夹
 router.get('/explore', ctx => new Promise((resolve, reject) => {
     child_process_1.exec(`explorer "${ctx.query.path.replace(/\//g, '\\')}"`, err => {
@@ -25,48 +23,74 @@ router.get('/file', ctx => {
     ctx.status = 200;
     // ctx.set('cache-control', 'no-store,no-cache')
     return new Promise((resolve, reject) => {
-        fs_1.createReadStream(path).pipe(ctx.res).on('finish', resolve).on('error', reject);
+        fs_extra_1.createReadStream(path).pipe(ctx.res).on('finish', resolve).on('error', reject);
     });
 });
-router.get('/files', ctx => {
+router.delete('/file', async (ctx) => {
+    var path = ctx.query.path;
+    var data = {
+        code: 0
+    };
+    try {
+        await fs_extra_1.remove(path);
+    }
+    catch (e) {
+        data.code = 1;
+        data.msg = e.message;
+    }
+    ctx.body = data;
+});
+router.get('/file/list', ctx => {
     var pattern = ctx.query.pattern;
     var nodir = ctx.query.nodir;
+    var path = ctx.query.path;
     return new Promise((resolve, reject) => {
-        glob(pattern, { nodir }, (err, data) => {
-            var code = err ? 1 : 0;
-            ctx.body = {
-                code,
-                data
-            };
-            if (err) {
-                return reject(err);
-            }
-            resolve();
-        });
+        if (pattern) {
+            glob(pattern, { nodir }, (err, data) => {
+                var code = err ? 1 : 0;
+                ctx.body = {
+                    code,
+                    data
+                };
+                if (err) {
+                    return reject(err);
+                }
+                resolve();
+            });
+        }
+        else {
+            let globInstance = new glob.Glob(path + '/*', {
+                stat: true
+            }, (err, matches) => {
+                var code = err ? 1 : 0;
+                ctx.body = {
+                    code
+                };
+                if (err) {
+                    return reject(err);
+                }
+                ctx.body.data = matches.map(path => {
+                    var stat = globInstance.statCache[path];
+                    return {
+                        name: Path.basename(path),
+                        path,
+                        dir: stat.isDirectory(),
+                        ctime: stat.ctimeMs,
+                        mtime: stat.mtimeMs
+                    };
+                });
+                resolve();
+            });
+        }
     });
 });
-router.put('/upload', ctx => {
+router.put('/file/upload', ctx => {
     var path = ctx.query.path;
-    if (ctx.request.type === 'application/json') {
-        return new Promise((resolve, reject) => {
-            fs_1.writeFile(path, JSON.stringify(ctx.request.body), (err) => {
-                ctx.body = {
-                    code: err ? 1 : 0
-                };
-                resolve();
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    resolve();
-                }
-            });
-        });
-    }
     return new Promise((resolve, reject) => {
-        ctx.req.pipe(fs_1.createWriteStream(path)).on('finish', () => {
+        ctx.req.pipe(fs_extra_1.createWriteStream(path)).on('finish', () => {
             ctx.body = {
-                code: 0
+                code: 0,
+                data: path
             };
             resolve();
         }).on('error', reject);

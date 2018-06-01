@@ -1,7 +1,7 @@
 import * as glob from 'glob'
 import * as Path from 'path'
-import { writeFile, createReadStream, createWriteStream } from 'fs';
-import { IncomingMessage } from 'http';
+import { writeFile } from 'fs';
+import DB from './db';
 
 function getMatches(pattern: string) {
   return new Promise((resolve, reject) => {
@@ -14,28 +14,16 @@ function getMatches(pattern: string) {
   })
 }
 
-var filename = Path.resolve('data/project.json')
+var db = new DB('data/project.json')
 var list: any[]
 
 export function getList() {
   if (list) {
     return list
   }
-  try {
-    list = require(filename) || []
-  } catch (e) {
-    list = []
-  }
-  return list
+  return db.load()
 }
 export function addListItem(obj: any) {
-  return new Promise((resolve, reject) => {
-    list.push(obj)
-    writeFile(filename, JSON.stringify(list), (err) => {
-      if (err) {
-        return reject(err)
-      }
-      resolve()
-    })
-  })
+  list.push(obj)
+  db.save(list)
 }

@@ -1,26 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
-var filename = 'data/local-server.json';
-function getItems() {
-    return new Promise((resolve, reject) => {
-        fs_1.readFile(filename, 'utf8', (err, data) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(JSON.parse(data));
-        });
-    });
+const db_1 = require("./db");
+var db = new db_1.default('data/local-server.json');
+var items;
+db.load().then(arr => {
+    items = arr;
+});
+function list() {
+    return db.load();
 }
-exports.getItems = getItems;
-function saveItems(items) {
-    return new Promise((resolve, reject) => {
-        fs_1.writeFile(filename, JSON.stringify(items), err => {
-            if (err) {
-                return reject(err);
-            }
-            resolve();
-        });
-    });
+exports.list = list;
+function save() {
+    return db.save(items.map(item => ({
+        name: item.name,
+        dir: item.dir,
+        port: item.port,
+        open: item.open,
+        proxy: item.proxy
+    })));
 }
-exports.saveItems = saveItems;
+exports.save = save;
+function add(item) {
+    items.push(item);
+    return save();
+}
+exports.add = add;
+function findByDir(dir) {
+    return items.find(item => item.dir === dir);
+}
+exports.findByDir = findByDir;

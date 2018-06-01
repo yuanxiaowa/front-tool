@@ -164,11 +164,11 @@ var common = __webpack_require__("RS51");
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return Object(common["c" /* getScript */])('http://petstore.swagger.io/swagger-ui-bundle.js');
+              return Object(common["d" /* getScript */])('http://petstore.swagger.io/swagger-ui-bundle.js');
 
             case 2:
               _context.next = 4;
-              return Object(common["c" /* getScript */])('http://petstore.swagger.io/swagger-ui-standalone-preset.js');
+              return Object(common["d" /* getScript */])('http://petstore.swagger.io/swagger-ui-standalone-preset.js');
 
             case 4:
               SwaggerUIBundle = window.SwaggerUIBundle;
@@ -272,11 +272,11 @@ var common = __webpack_require__("RS51");
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return Object(common["c" /* getScript */])('https://editor.swagger.io//dist/swagger-editor-bundle.js');
+              return Object(common["d" /* getScript */])('https://editor.swagger.io//dist/swagger-editor-bundle.js');
 
             case 2:
               _context.next = 4;
-              return Object(common["c" /* getScript */])('https://editor.swagger.io//dist/swagger-editor-standalone-preset.js');
+              return Object(common["d" /* getScript */])('https://editor.swagger.io//dist/swagger-editor-standalone-preset.js');
 
             case 4:
               // await getScript('//cdn.bootcss.com/swagger-ui/3.5.0/swagger-ui.js')
@@ -351,4 +351,4 @@ var update = __webpack_require__("rjj0")("0ade6bcd", content, true, {});
 /***/ })
 
 });
-//# sourceMappingURL=interface.5d114e0c2e1c39c6f0ab.js.map
+//# sourceMappingURL=interface.5c0bdfe0972597e07579.js.map

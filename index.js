@@ -13,11 +13,11 @@ koa.use((ctx, next) => {
     if (ctx.path === '/') {
         return send(ctx, './public/index.html');
     }
-    else if (ctx.path.startsWith('/static/')) {
+    else if (/^\/(static|product)\//.test(ctx.path)) {
         return send(ctx, ctx.path, {
             root: './public',
             gzip: true,
-            maxAge: 1000 * 60 * 60 * 24
+            immutable: true
         });
     }
     return next();

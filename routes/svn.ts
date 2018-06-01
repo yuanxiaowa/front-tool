@@ -1,5 +1,3 @@
-import * as Router from 'koa-router'
-import { wrapRouter } from '../utils'
 import {
   getPaths,
   addPath,
@@ -15,12 +13,9 @@ import {
   mergeinfo,
   getStructures
 } from '../models/svn'
+import getRouter from './router';
 
-var router = new Router({
-  prefix: '/api/svn'
-})
-
-wrapRouter(router)
+const router = getRouter('/api/svn');
 
 router.get('/paths', getPaths)
   .post('/path', (ctx) => {

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const glob = require("glob");
-const Path = require("path");
-const fs_1 = require("fs");
+const db_1 = require("./db");
 function getMatches(pattern) {
     return new Promise((resolve, reject) => {
         glob(pattern, (err, matches) => {
@@ -13,30 +12,17 @@ function getMatches(pattern) {
         });
     });
 }
-var filename = Path.resolve('data/project.json');
+var db = new db_1.default('data/project.json');
 var list;
 function getList() {
     if (list) {
         return list;
     }
-    try {
-        list = require(filename) || [];
-    }
-    catch (e) {
-        list = [];
-    }
-    return list;
+    return db.load();
 }
 exports.getList = getList;
 function addListItem(obj) {
-    return new Promise((resolve, reject) => {
-        list.push(obj);
-        fs_1.writeFile(filename, JSON.stringify(list), (err) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve();
-        });
-    });
+    list.push(obj);
+    db.save(list);
 }
 exports.addListItem = addListItem;

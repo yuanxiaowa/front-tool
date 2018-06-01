@@ -1,40 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const browser_sync_1 = require("browser-sync");
-const Router = require("koa-router");
-const utils_1 = require("../utils");
 const devserver_1 = require("../models/devserver");
 const httpProxy = require("http-proxy");
-var router = new Router({
-    prefix: '/api/devserver'
+const router_1 = require("./router");
+const router = router_1.default('/api/devserver');
+router.get('/list', async () => {
+    var items = await devserver_1.list();
+    return items.map((item) => ({
+        name: item.name,
+        dir: item.dir,
+        port: item.port,
+        running: !!item.instance,
+        urls: item.urls,
+        proxy: item.proxy
+    }));
 });
-utils_1.wrapRouter(router);
-var items;
-devserver_1.getItems().then(_items => {
-    items = _items;
-});
-router.get('/list', () => items.map(item => ({
-    name: item.name,
-    dir: item.dir,
-    port: item.port,
-    running: !!item.instance,
-    urls: item.urls,
-    proxy: item.proxy
-})));
 router.post('/add', ctx => {
     var data = ctx.request.body;
     if (data.proxy) {
         let lines = data.proxy.trim().split(/\r?\n/);
         data.proxy = lines.map(line => line.split(/\s+/)).filter(line => line.length >= 2);
     }
-    items.push(data);
-    return devserver_1.saveItems(items.map(item => ({
-        name: item.name,
-        dir: item.dir,
-        port: item.port,
-        open: item.open,
-        proxy: item.proxy
-    })));
+    return devserver_1.add(data);
 });
 var proxy = httpProxy.createProxyServer({
     changeOrigin: true,
@@ -89,15 +77,14 @@ function startServer(item) {
     });
 }
 router.get('/start', async (ctx) => {
-    var baseDir = ctx.query.dir;
-    var item = items.find(item => item.dir === baseDir);
+    var item = devserver_1.findByDir(ctx.query.dir);
     var { instance, urls } = await startServer(item);
     item.instance = instance;
     item.urls = urls;
 });
 router.get('/stop', ctx => {
     var baseDir = ctx.query.dir;
-    var item = items.find(item => item.dir === baseDir);
+    var item = devserver_1.findByDir(ctx.query.dir);
     if (item.instance) {
         item.instance.exit();
         item.instance = undefined;

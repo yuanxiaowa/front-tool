@@ -8,6 +8,7 @@ import {
 import {
   LsFile
 } from 'svn-tool2/structures'
+import DB from './db';
 export {
   status as getStatus,
   add as addFiles,
@@ -29,17 +30,16 @@ var conf: Conf = {
   paths: []
 }
 
-var confFileName = Path.resolve('.conf');
-function init() {
-  try {
-    conf = JSON.parse(readFileSync(confFileName, 'utf8'));
-  } catch (e) {
-  }
-}
+var db = new DB<Conf>('.conf')
+
 function writeConf() {
-  writeFile(confFileName, JSON.stringify(conf), () => { })
+  // @ts-ignore
+  return db.save(conf)
 }
-init();
+db.load().then(items => {
+  // @ts-ignore
+  conf = items
+})
 
 export function getPaths() {
   return conf.paths;

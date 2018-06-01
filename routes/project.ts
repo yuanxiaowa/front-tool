@@ -1,11 +1,7 @@
-import * as Path from 'path'
-import * as Router from 'koa-router'
-import { wrapRouter } from '../utils'
 import { getList, addListItem} from '../models/project';
-var router = new Router({
-  prefix: '/api/project'
-});
-wrapRouter(router);
+import getRouter from './router';
+
+const router = getRouter('/api/project');
 
 router.get('/dir', ctx => getList())
 
